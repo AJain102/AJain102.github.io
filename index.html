@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ansh Jain — Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0a0e1a;
+      --surface: #111827;
+      --card: #161d2e;
+      --accent: #3b82f6;
+      --accent2: #06b6d4;
+      --accent3: #8b5cf6;
+      --text: #f0f4ff;
+      --muted: #6b7280;
+      --border: rgba(59,130,246,0.15);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Syne', sans-serif;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* Custom cursor */
+    .cursor {
+      width: 12px; height: 12px;
+      background: var(--accent);
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      transition: transform 0.15s ease, background 0.2s;
+      transform: translate(-50%, -50%);
+    }
+    .cursor-ring {
+      width: 36px; height: 36px;
+      border: 1.5px solid var(--accent);
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      z-index: 9998;
+      transition: transform 0.35s ease, width 0.2s, height 0.2s, opacity 0.2s;
+      transform: translate(-50%, -50%);
+      opacity: 0.5;
+    }
+
+    /* Grid background */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(59,130,246,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(59,130,246,0.04) 1px, transparent 1px);
+      background-size: 48px 48px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Nav */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.2rem 4rem;
+      background: rgba(10,14,26,0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: 'Space Mono', monospace;
+      font-size: 1rem;
+      color: var(--accent);
+      letter-spacing: 0.05em;
+    }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--text); }
+
+    /* Hero */
+    .hero {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 8rem 4rem 4rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .hero-tag {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.78rem;
+      color: var(--accent2);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 0.6s 0.2s forwards;
+    }
+    .hero h1 {
+      font-size: clamp(3rem, 7vw, 6rem);
+      font-weight: 800;
+      line-height: 1.0;
+      letter-spacing: -0.02em;
+      opacity: 0;
+      animation: fadeUp 0.7s 0.35s forwards;
+    }
+    .hero h1 span {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-sub {
+      margin-top: 1.5rem;
+      font-size: 1.15rem;
+      color: var(--muted);
+      max-width: 560px;
+      line-height: 1.7;
+      font-weight: 400;
+      opacity: 0;
+      animation: fadeUp 0.7s 0.5s forwards;
+    }
+    .hero-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-top: 2.5rem;
+      opacity: 0;
+      animation: fadeUp 0.7s 0.65s forwards;
+    }
+    .chip {
+      padding: 0.4rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      font-size: 0.8rem;
+      color: var(--accent2);
+      font-family: 'Space Mono', monospace;
+      background: rgba(6,182,212,0.05);
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .chip:hover {
+      background: rgba(6,182,212,0.12);
+      border-color: var(--accent2);
+    }
+    .hero-cta {
+      margin-top: 3rem;
+      display: flex;
+      gap: 1rem;
+      opacity: 0;
+      animation: fadeUp 0.7s 0.8s forwards;
+    }
+    .btn {
+      padding: 0.8rem 2rem;
+      border-radius: 6px;
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 0.9rem;
+      letter-spacing: 0.04em;
+      cursor: none;
+      text-decoration: none;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn:hover { transform: translateY(-2px); }
+    .btn-primary {
+      background: var(--accent);
+      color: white;
+      box-shadow: 0 0 24px rgba(59,130,246,0.3);
+    }
+    .btn-primary:hover { box-shadow: 0 0 36px rgba(59,130,246,0.5); }
+    .btn-outline {
+      border: 1px solid var(--border);
+      color: var(--text);
+      background: transparent;
+    }
+    .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* Scroll indicator */
+    .scroll-hint {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 4rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--muted);
+      letter-spacing: 0.12em;
+      opacity: 0;
+      animation: fadeUp 0.7s 1.1s forwards;
+    }
+    .scroll-line {
+      width: 40px; height: 1px;
+      background: linear-gradient(90deg, var(--accent), transparent);
+    }
+
+    /* Sections */
+    section {
+      position: relative;
+      z-index: 1;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 5rem 4rem;
+    }
+    .section-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.75rem;
+    }
+    .section-title {
+      font-size: 2.4rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 3rem;
+    }
+
+    /* Stats bar */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 5rem;
+    }
+    .stat {
+      background: var(--card);
+      padding: 2rem 1.5rem;
+      text-align: center;
+      transition: background 0.2s;
+    }
+    .stat:hover { background: var(--surface); }
+    .stat-num {
+      font-size: 2.4rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1;
+    }
+    .stat-label {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: 0.4rem;
+      letter-spacing: 0.05em;
+    }
+
+    /* Project cards */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+    .project-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+    }
+    .project-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--accent);
+      box-shadow: 0 12px 40px rgba(59,130,246,0.12);
+    }
+    .project-img {
+      width: 100%;
+      aspect-ratio: 16/10;
+      background: linear-gradient(135deg, #1e2a3a, #0f1923);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .project-img::after {
+      content: 'PHOTO COMING SOON';
+      position: absolute;
+      bottom: 0.75rem; right: 0.75rem;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.55rem;
+      letter-spacing: 0.15em;
+      color: var(--muted);
+      background: rgba(0,0,0,0.4);
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+    }
+    .project-body { padding: 1.25rem 1.5rem 1.5rem; }
+    .project-tag {
+      display: inline-block;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent2);
+      margin-bottom: 0.5rem;
+    }
+    .project-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+    .project-desc {
+      font-size: 0.85rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    .project-tools {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-top: 1rem;
+    }
+    .tool-tag {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      padding: 0.2rem 0.6rem;
+      background: rgba(59,130,246,0.08);
+      border: 1px solid rgba(59,130,246,0.2);
+      border-radius: 4px;
+      color: var(--accent);
+    }
+
+    /* Skills */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1rem;
+    }
+    .skill-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.25rem 1.5rem;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .skill-card:hover { border-color: var(--accent3); transform: translateY(-2px); }
+    .skill-icon { font-size: 1.5rem; margin-bottom: 0.6rem; }
+    .skill-name { font-weight: 700; font-size: 0.95rem; margin-bottom: 0.25rem; }
+    .skill-desc { font-size: 0.78rem; color: var(--muted); line-height: 1.5; }
+
+    /* Achievements */
+    .achievements-list { display: flex; flex-direction: column; gap: 1rem; }
+    .achievement {
+      display: flex;
+      align-items: flex-start;
+      gap: 1.25rem;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.25rem 1.5rem;
+      transition: border-color 0.2s;
+    }
+    .achievement:hover { border-color: rgba(139,92,246,0.4); }
+    .achievement-icon {
+      font-size: 1.5rem;
+      flex-shrink: 0;
+      width: 2.5rem;
+      text-align: center;
+    }
+    .achievement-text strong { font-size: 0.95rem; display: block; margin-bottom: 0.2rem; }
+    .achievement-text span { font-size: 0.82rem; color: var(--muted); }
+
+    /* Contact */
+    .contact-box {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 3rem;
+      text-align: center;
+    }
+    .contact-box h3 { font-size: 1.8rem; font-weight: 800; margin-bottom: 0.75rem; }
+    .contact-box p { color: var(--muted); margin-bottom: 2rem; line-height: 1.7; }
+    .contact-links { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; }
+
+    /* Footer */
+    footer {
+      position: relative; z-index: 1;
+      text-align: center;
+      padding: 2rem;
+      border-top: 1px solid var(--border);
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--muted);
+    }
+
+    /* Animations */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* Divider */
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { gap: 1.5rem; }
+      .hero, section { padding: 4rem 1.5rem; }
+      .hero { padding-top: 7rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<nav>
+  <div class="nav-logo">AJ // portfolio</div>
+  <ul class="nav-links">
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#achievements">Achievements</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- Hero -->
+<div class="hero">
+  <div class="hero-tag">// Sammamish, WA &nbsp;&bull;&nbsp; Tesla STEM High School &nbsp;&bull;&nbsp; Class of 2030</div>
+  <h1>Ansh<br><span>Jain</span></h1>
+  <p class="hero-sub">Robotics team captain, CAD designer, and programmer building cool things at the intersection of code, hardware, and design.</p>
+  <div class="hero-chips">
+    <span class="chip">Python</span>
+    <span class="chip">Fusion 360</span>
+    <span class="chip">VEX IQ</span>
+    <span class="chip">TinkerCAD</span>
+    <span class="chip">FLL</span>
+    <span class="chip">Science Olympiad</span>
+    <span class="chip">Scratch</span>
+  </div>
+  <div class="hero-cta">
+    <a href="#projects" class="btn btn-primary">View Projects</a>
+    <a href="https://github.com/AJain102" target="_blank" class="btn btn-outline">GitHub ↗</a>
+  </div>
+  <div class="scroll-hint">
+    <div class="scroll-line"></div>
+    scroll to explore
+  </div>
+</div>
+
+<!-- Stats -->
+<section style="padding-top: 0;">
+  <div class="stats reveal">
+    <div class="stat"><div class="stat-num">5</div><div class="stat-label">Years Robotics</div></div>
+    <div class="stat"><div class="stat-num">Top 20</div><div class="stat-label">WA State VEX IQ</div></div>
+    <div class="stat"><div class="stat-num">Top 15</div><div class="stat-label">Science Olympiad</div></div>
+    <div class="stat"><div class="stat-num">70+</div><div class="stat-label">Volunteer Hours</div></div>
+    <div class="stat"><div class="stat-num">4.0</div><div class="stat-label">GPA</div></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- Projects -->
+<section id="projects">
+  <div class="section-label reveal">// 01 — work</div>
+  <h2 class="section-title reveal">CAD & 3D Projects</h2>
+  <div class="projects-grid">
+
+    <div class="project-card reveal">
+      <div class="project-img">⚙️</div>
+      <div class="project-body">
+        <span class="project-tag">Fusion 360</span>
+        <div class="project-title">Project 1 — Coming Soon</div>
+        <p class="project-desc">Add your project description here. What did you design? What was the purpose? How did you make it?</p>
+        <div class="project-tools">
+          <span class="tool-tag">Fusion 360</span>
+          <span class="tool-tag">3D Print</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="project-img">🔩</div>
+      <div class="project-body">
+        <span class="project-tag">TinkerCAD</span>
+        <div class="project-title">Project 2 — Coming Soon</div>
+        <p class="project-desc">Add your project description here. What did you design? What was the purpose? How did you make it?</p>
+        <div class="project-tools">
+          <span class="tool-tag">TinkerCAD</span>
+          <span class="tool-tag">3D Print</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="project-img">🏗️</div>
+      <div class="project-body">
+        <span class="project-tag">JSS Community</span>
+        <div class="project-title">JSS Community Models</div>
+        <p class="project-desc">3D models designed for the Jain Society of Seattle community projects using Fusion 360 and TinkerCAD.</p>
+        <div class="project-tools">
+          <span class="tool-tag">Fusion 360</span>
+          <span class="tool-tag">TinkerCAD</span>
+          <span class="tool-tag">Community</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="project-img">🤖</div>
+      <div class="project-body">
+        <span class="project-tag">VEX IQ</span>
+        <div class="project-title">VEX IQ Robot Build</div>
+        <p class="project-desc">Designed and built the majority of robot components as team captain, while also programming all autonomous routines. Placed Top 20 in Washington State.</p>
+        <div class="project-tools">
+          <span class="tool-tag">VEX IQ</span>
+          <span class="tool-tag">Python</span>
+          <span class="tool-tag">Autonomous</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <p style="margin-top:1.5rem; font-family:'Space Mono',monospace; font-size:0.72rem; color:var(--muted); text-align:center;">
+    📸 &nbsp; Photos and screenshots being added soon — check back shortly!
+  </p>
+</section>
+
+<div class="divider"></div>
+
+<!-- Skills -->
+<section id="skills">
+  <div class="section-label reveal">// 02 — toolkit</div>
+  <h2 class="section-title reveal">Skills</h2>
+  <div class="skills-grid">
+    <div class="skill-card reveal">
+      <div class="skill-icon">🐍</div>
+      <div class="skill-name">Python</div>
+      <div class="skill-desc">Used for robot programming, autonomous routines, and general problem-solving.</div>
+    </div>
+    <div class="skill-card reveal">
+      <div class="skill-icon">🧱</div>
+      <div class="skill-name">Fusion 360</div>
+      <div class="skill-desc">Advanced 3D modeling for functional parts, assemblies, and community projects.</div>
+    </div>
+    <div class="skill-card reveal">
+      <div class="skill-icon">📐</div>
+      <div class="skill-name">TinkerCAD</div>
+      <div class="skill-desc">Rapid prototyping and accessible 3D design for a variety of real-world objects.</div>
+    </div>
+    <div class="skill-card reveal">
+      <div class="skill-icon">🤖</div>
+      <div class="skill-name">VEX IQ & FLL</div>
+      <div class="skill-desc">5 years of competitive robotics — programming, building, and leading teams.</div>
+    </div>
+    <div class="skill-card reveal">
+      <div class="skill-icon">🎤</div>
+      <div class="skill-name">Public Speaking</div>
+      <div class="skill-desc">Toastmasters ACB certified. 2nd place Club Level Contest. Mentor to younger speakers.</div>
+    </div>
+    <div class="skill-card reveal">
+      <div class="skill-icon">🌐</div>
+      <div class="skill-name">Hindi (Bilingual)</div>
+      <div class="skill-desc">Washington State Seal of Biliteracy in Hindi.</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- Achievements -->
+<section id="achievements">
+  <div class="section-label reveal">// 03 — highlights</div>
+  <h2 class="section-title reveal">Achievements</h2>
+  <div class="achievements-list">
+    <div class="achievement reveal">
+      <div class="achievement-icon">🏆</div>
+      <div class="achievement-text">
+        <strong>Top 20 — Washington State VEX IQ Competition</strong>
+        <span>Served as Team Captain, Lead Programmer, and primary builder for the robot.</span>
+      </div>
+    </div>
+    <div class="achievement reveal">
+      <div class="achievement-icon">🔬</div>
+      <div class="achievement-text">
+        <strong>Top 15 — Washington State Science Olympiad, Machines Event (2025 & 2026)</strong>
+        <span>Placed in the top 15 in the Machines event at state level two years running.</span>
+      </div>
+    </div>
+    <div class="achievement reveal">
+      <div class="achievement-icon">🎖️</div>
+      <div class="achievement-text">
+        <strong>Toastmasters Advanced Communicator Bronze (ACB) — 2026</strong>
+        <span>Earned the ACB designation, along with the Competent Communicator certificate in 2025.</span>
+      </div>
+    </div>
+    <div class="achievement reveal">
+      <div class="achievement-icon">🥈</div>
+      <div class="achievement-text">
+        <strong>2nd Place — Toastmasters Club Level Speaker Contest</strong>
+        <span>Competed and placed at the club level among experienced speakers.</span>
+      </div>
+    </div>
+    <div class="achievement reveal">
+      <div class="achievement-icon">📜</div>
+      <div class="achievement-text">
+        <strong>Washington State Seal of Biliteracy — Hindi</strong>
+        <span>Recognized for bilingual proficiency in English and Hindi.</span>
+      </div>
+    </div>
+    <div class="achievement reveal">
+      <div class="achievement-icon">⭐</div>
+      <div class="achievement-text">
+        <strong>4.0 GPA — Tesla STEM High School</strong>
+        <span>Maintaining a perfect GPA at one of Washington's top STEM-focused high schools.</span>
+      </div>
+    </div>
+    <div class="achievement reveal">
+      <div class="achievement-icon">🤝</div>
+      <div class="achievement-text">
+        <strong>70+ Community Volunteer Hours</strong>
+        <span>Across Gurukul Toastmasters, Jain Society of Seattle, and Boy Scouts of America.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- Contact -->
+<section id="contact">
+  <div class="contact-box reveal">
+    <h3>Let's Connect</h3>
+    <p>Whether it's about robotics, CAD, Code Ninjas, or just want to say hi — feel free to reach out.</p>
+    <div class="contact-links">
+      <a href="mailto:anshjain1310@outlook.com" class="btn btn-primary">📧 Email Me</a>
+      <a href="https://github.com/AJain102" target="_blank" class="btn btn-outline">GitHub ↗</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  built by ansh jain &nbsp;•&nbsp; sammamish, wa &nbsp;•&nbsp; 2026
+</footer>
+
+<script>
+  // Cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+  function animateCursor() {
+    cursor.style.left = mx + 'px'; cursor.style.top = my + 'px';
+    rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
+    ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+    requestAnimationFrame(animateCursor);
+  }
+  animateCursor();
+
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 60);
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => observer.observe(el));
+
+  // Smooth scroll
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      document.querySelector(a.getAttribute('href'))?.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+</script>
+</body>
+</html>
