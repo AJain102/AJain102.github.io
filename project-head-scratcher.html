@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Head Scratcher — Ansh Jain</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+  :root {
+    --bg: #fafaf8;
+    --card: #ffffff;
+    --text: #1a1a1a;
+    --muted: #6b6b6b;
+    --border: #e5e5e5;
+    --accent: #2563eb;
+    --accent-light: #eff6ff;
+    --tag: #f3f4f6;
+    --tag-text: #374151;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; overflow-x: hidden; }
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1rem 3rem;
+    background: rgba(250,250,248,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo { font-weight: 700; font-size: 1rem; color: var(--text); text-decoration: none; letter-spacing: -0.01em; }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a { color: var(--muted); text-decoration: none; font-size: 0.875rem; transition: color 0.15s; }
+  .nav-links a:hover { color: var(--text); }
+  .nav-back { font-size: 0.875rem; color: var(--muted); text-decoration: none; transition: color 0.15s; }
+  .nav-back:hover { color: var(--text); }
+  .page-wrap { max-width: 960px; margin: 0 auto; padding: 7rem 2rem 5rem; }
+  .breadcrumb { font-size: 0.8rem; color: var(--muted); margin-bottom: 1.5rem; }
+  .breadcrumb a { color: var(--muted); text-decoration: none; }
+  .breadcrumb a:hover { color: var(--text); }
+  /* Project page header */
+  .project-tag { display: inline-block; font-size: 0.75rem; color: var(--muted); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em; }
+  .project-header { margin-bottom: 2.5rem; }
+  .project-header h1 { font-size: clamp(1.75rem, 4vw, 2.75rem); font-weight: 700; letter-spacing: -0.02em; line-height: 1.15; margin-bottom: 1rem; }
+  .project-meta { display: flex; flex-wrap: wrap; gap: 1.5rem; font-size: 0.82rem; color: var(--muted); }
+  .meta-item strong { color: var(--text); display: block; font-size: 0.95rem; margin-bottom: 0.1rem; }
+  .badge { display: inline-flex; align-items: center; gap: 0.4rem; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 6px; padding: 0.3rem 0.75rem; font-size: 0.78rem; color: #16a34a; margin-bottom: 1.5rem; }
+  /* Slideshow */
+  .slideshow { background: #f5f5f3; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 2.5rem; }
+  .slide-area { position: relative; aspect-ratio: 16/10; overflow: hidden; background: #f5f5f3; }
+  .slides { display: flex; height: 100%; transition: transform 0.4s cubic-bezier(0.4,0,0.2,1); }
+  .slide { min-width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
+  .slide img, .slide video { width: 100%; height: 100%; object-fit: contain; }
+  .slide-label { position: absolute; top: 0.75rem; left: 0.75rem; font-size: 0.7rem; background: rgba(255,255,255,0.9); border: 1px solid var(--border); padding: 0.2rem 0.6rem; border-radius: 4px; color: var(--muted); pointer-events: none; z-index: 3; }
+  .slide-counter { position: absolute; bottom: 0.75rem; right: 0.75rem; font-size: 0.7rem; background: rgba(255,255,255,0.9); border: 1px solid var(--border); padding: 0.2rem 0.6rem; border-radius: 4px; color: var(--muted); pointer-events: none; z-index: 3; }
+  .btn-slide { position: absolute; top: 50%; transform: translateY(-50%); width: 36px; height: 36px; border-radius: 50%; background: white; border: 1px solid var(--border); color: var(--text); font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.15s; z-index: 4; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+  .btn-slide:hover { background: #f3f4f6; }
+  .btn-prev { left: 0.75rem; } .btn-next { right: 0.75rem; }
+  .thumbnails { display: flex; gap: 0.4rem; padding: 0.75rem; overflow-x: auto; scrollbar-width: none; border-top: 1px solid var(--border); background: white; }
+  .thumbnails::-webkit-scrollbar { display: none; }
+  .thumb { min-width: 70px; height: 48px; border-radius: 6px; overflow: hidden; cursor: pointer; border: 2px solid transparent; transition: border-color 0.15s, opacity 0.15s; opacity: 0.5; flex-shrink: 0; background: #f5f5f3; display: flex; align-items: center; justify-content: center; font-size: 1rem; }
+  .thumb img { width: 100%; height: 100%; object-fit: cover; }
+  .thumb.active { border-color: var(--accent); opacity: 1; }
+  /* Project body */
+  .project-body { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; margin-bottom: 2.5rem; }
+  .description h2, .details h2 { font-size: 1rem; font-weight: 600; margin-bottom: 0.75rem; color: var(--text); }
+  .description p { color: var(--muted); line-height: 1.75; font-size: 0.9rem; }
+  .detail-item { display: flex; justify-content: space-between; align-items: center; padding: 0.6rem 0; border-bottom: 1px solid var(--border); font-size: 0.85rem; }
+  .detail-item:last-child { border-bottom: none; }
+  .detail-key { color: var(--muted); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.04em; }
+  .detail-val { font-weight: 500; }
+  .tool-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 1.25rem; }
+  .tool-tag { font-size: 0.72rem; padding: 0.25rem 0.6rem; background: var(--tag); border-radius: 4px; color: var(--tag-text); }
+  .bottom-nav { display: flex; justify-content: space-between; align-items: center; padding-top: 2rem; border-top: 1px solid var(--border); }
+  .btn { padding: 0.6rem 1.5rem; border-radius: 7px; font-size: 0.875rem; font-weight: 500; cursor: pointer; text-decoration: none; transition: background 0.15s, color 0.15s; display: inline-block; }
+  .btn-outline { border: 1px solid var(--border); color: var(--text); background: white; }
+  .btn-outline:hover { background: #f3f4f6; }
+  .btn-primary { background: var(--text); color: white; border: 1px solid var(--text); }
+  .btn-primary:hover { background: #333; }
+  footer { text-align: center; padding: 2rem; border-top: 1px solid var(--border); font-size: 0.78rem; color: var(--muted); margin-top: 2rem; }
+  @media(max-width: 768px) { nav { padding: 1rem 1.25rem; } .page-wrap { padding: 5.5rem 1.25rem 3rem; } .project-body { grid-template-columns: 1fr; gap: 2rem; } }
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="nav-logo">Ansh Jain</a>
+  <a href="projects.html" class="nav-back">← All Projects</a>
+</nav>
+<div class="page-wrap">
+  <div class="breadcrumb"><a href="index.html">Home</a> / <a href="projects.html">Projects</a> / Head Scratcher</div>
+  <div class="project-header">
+    <div class="project-tag">Personal · Fusion 360</div>
+    <h1>Head Scratcher / Scalp Massager</h1>
+    
+    <div class="project-meta"><div class="meta-item"><strong>Print</strong>~2.2 hrs total</div><div class="meta-item"><strong>Software</strong>Fusion 360</div><div class="meta-item"><strong>Parts</strong>Handle + prong attachment</div></div>
+  </div>
+  <div class="slideshow">
+    <div class="slide-area">
+      <div class="slide-label" id="slideLabel">Standing</div>
+      <div class="slide-counter" id="slideCounter">1 / 7</div>
+      <div class="slides" id="slides"><div class="slide"><img src="scratcher-print1.jpg" alt=""/></div><div class="slide"><img src="scratcher-print2.jpg" alt=""/></div><div class="slide"><img src="scratcher-print3.jpg" alt=""/></div><div class="slide"><img src="scratcher-cad1.png" alt=""/></div><div class="slide"><img src="scratcher-cad2.png" alt=""/></div><div class="slide"><img src="scratcher-cad3.png" alt=""/></div><div class="slide"><img src="scratcher-cad4.png" alt=""/></div></div>
+      <button class="btn-slide btn-prev" id="prev">&#8592;</button>
+      <button class="btn-slide btn-next" id="next">&#8594;</button>
+    </div>
+    <div class="thumbnails"><div class="thumb"><img src="scratcher-print1.jpg" alt=""/></div><div class="thumb"><img src="scratcher-print2.jpg" alt=""/></div><div class="thumb"><img src="scratcher-print3.jpg" alt=""/></div><div class="thumb"><img src="scratcher-cad1.png" alt=""/></div><div class="thumb"><img src="scratcher-cad2.png" alt=""/></div><div class="thumb"><img src="scratcher-cad3.png" alt=""/></div><div class="thumb"><img src="scratcher-cad4.png" alt=""/></div></div>
+  </div>
+  <div class="project-body">
+    <div class="description">
+      <h2>About this project</h2>
+      <p>A 3D printed head scratcher inspired by the classic metal ones in stores. Long handle with flexible prong arms that attach at the top — the prongs are designed to flex slightly for that satisfying tingling feeling. Printed in two parts that connect together.</p>
+      <div class="tool-tags"><span class="tool-tag">Fusion 360</span><span class="tool-tag">3D Printing</span><span class="tool-tag">Two-part assembly</span></div>
+    </div>
+    <div class="details">
+      <h2>Details</h2>
+      <div class="detail-item"><span class="detail-key">Software</span><span class="detail-val">Fusion 360</span></div><div class="detail-item"><span class="detail-key">Print</span><span class="detail-val">~2.2 hours all parts</span></div><div class="detail-item"><span class="detail-key">Material</span><span class="detail-val">Yellow PLA</span></div><div class="detail-item"><span class="detail-key">Parts</span><span class="detail-val">Handle + prong attachment</span></div><div class="detail-item"><span class="detail-key">Inspired by</span><span class="detail-val">Store metal head scratchers</span></div>
+    </div>
+  </div>
+  <div class="bottom-nav">
+    <a href="projects.html" class="btn btn-outline">← Back</a>
+    <a href="index.html#contact" class="btn btn-primary">Get in touch</a>
+  </div>
+</div>
+<footer>Ansh Jain · Sammamish, WA · 2026</footer>
+<script>
+  const labels = ['Standing', 'In use', 'Outdoors', 'CAD — handle', 'CAD — prong', 'CAD — array', 'CAD — assembly'];
+  const total = 7;
+  let cur = 0;
+  const slidesEl = document.getElementById('slides');
+  const thumbs = document.querySelectorAll('.thumb');
+  const labelEl = document.getElementById('slideLabel');
+  const counterEl = document.getElementById('slideCounter');
+  function goTo(n) {
+    document.querySelectorAll('.slide video').forEach(v => v.pause());
+    cur = (n + total) % total;
+    slidesEl.style.transform = 'translateX(-' + (cur * 100) + '%)';
+    thumbs.forEach((t, i) => t.classList.toggle('active', i === cur));
+    labelEl.textContent = labels[cur];
+    counterEl.textContent = (cur + 1) + ' / ' + total;
+    thumbs[cur].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+  }
+  document.getElementById('prev').addEventListener('click', () => goTo(cur - 1));
+  document.getElementById('next').addEventListener('click', () => goTo(cur + 1));
+  thumbs.forEach((t, i) => t.addEventListener('click', () => goTo(i)));
+  document.addEventListener('keydown', e => { if (e.key === 'ArrowLeft') goTo(cur - 1); if (e.key === 'ArrowRight') goTo(cur + 1); });
+  let touchX = 0;
+  slidesEl.addEventListener('touchstart', e => touchX = e.touches[0].clientX, { passive: true });
+  slidesEl.addEventListener('touchend', e => { const diff = touchX - e.changedTouches[0].clientX; if (Math.abs(diff) > 40) goTo(diff > 0 ? cur + 1 : cur - 1); });
+</script>
+</body>
+</html>

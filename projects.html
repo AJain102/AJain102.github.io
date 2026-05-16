@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Projects — Ansh Jain</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0a0e1a;
+      --surface: #111827;
+      --card: #161d2e;
+      --accent: #3b82f6;
+      --accent2: #06b6d4;
+      --accent3: #8b5cf6;
+      --text: #f0f4ff;
+      --muted: #6b7280;
+      --border: rgba(59,130,246,0.15);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Syne', sans-serif;
+      overflow-x: hidden;
+      cursor: none;
+    }
+    .cursor {
+      width: 12px; height: 12px;
+      background: var(--accent);
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+    }
+    .cursor-ring {
+      width: 36px; height: 36px;
+      border: 1.5px solid var(--accent);
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%, -50%);
+      opacity: 0.5;
+      transition: transform 0.35s ease;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(59,130,246,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(59,130,246,0.04) 1px, transparent 1px);
+      background-size: 48px 48px;
+      pointer-events: none;
+      z-index: 0;
+    }
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.2rem 4rem;
+      background: rgba(10,14,26,0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: 'Space Mono', monospace;
+      font-size: 1rem;
+      color: var(--accent);
+      letter-spacing: 0.05em;
+      text-decoration: none;
+    }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--text); }
+
+    .page-header {
+      position: relative;
+      z-index: 1;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 10rem 4rem 3rem;
+    }
+    .page-header .section-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.75rem;
+    }
+    .page-header h1 {
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 1rem;
+    }
+    .page-header p {
+      color: var(--muted);
+      font-size: 1rem;
+      max-width: 500px;
+      line-height: 1.7;
+    }
+
+    /* Filter bar */
+    .filter-bar {
+      position: relative;
+      z-index: 1;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 4rem 2rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .filter-btn {
+      padding: 0.4rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-family: 'Space Mono', monospace;
+      color: var(--muted);
+      background: transparent;
+      cursor: none;
+      transition: all 0.2s;
+    }
+    .filter-btn:hover, .filter-btn.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: white;
+    }
+
+    /* Grid */
+    .projects-section {
+      position: relative;
+      z-index: 1;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 4rem 6rem;
+    }
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+    .project-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    .project-card.visible {
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 0.5s ease, transform 0.5s ease, border-color 0.2s, box-shadow 0.2s;
+    }
+    .project-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--accent);
+      box-shadow: 0 12px 40px rgba(59,130,246,0.12);
+    }
+    .project-img {
+      width: 100%;
+      aspect-ratio: 16/10;
+      background: linear-gradient(135deg, #1e2a3a, #0f1923);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .project-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      position: absolute;
+      inset: 0;
+    }
+    .project-img .placeholder-label {
+      position: absolute;
+      bottom: 0.75rem; right: 0.75rem;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.55rem;
+      letter-spacing: 0.15em;
+      color: var(--muted);
+      background: rgba(0,0,0,0.5);
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+    }
+    .project-body { padding: 1.25rem 1.5rem 1.5rem; }
+    .project-tag {
+      display: inline-block;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent2);
+      margin-bottom: 0.4rem;
+    }
+    .project-title { font-size: 1rem; font-weight: 700; margin-bottom: 0.4rem; }
+    .project-desc { font-size: 0.82rem; color: var(--muted); line-height: 1.6; }
+    .project-tools {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-top: 0.9rem;
+    }
+    .tool-tag {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.62rem;
+      padding: 0.2rem 0.55rem;
+      background: rgba(59,130,246,0.08);
+      border: 1px solid rgba(59,130,246,0.2);
+      border-radius: 4px;
+      color: var(--accent);
+    }
+
+    .btn {
+      padding: 0.8rem 2rem;
+      border-radius: 6px;
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 0.9rem;
+      letter-spacing: 0.04em;
+      cursor: none;
+      text-decoration: none;
+      transition: transform 0.2s, box-shadow 0.2s;
+      display: inline-block;
+    }
+    .btn-outline {
+      border: 1px solid var(--border);
+      color: var(--text);
+      background: transparent;
+    }
+    .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+
+    footer {
+      position: relative; z-index: 1;
+      text-align: center;
+      padding: 2rem;
+      border-top: 1px solid var(--border);
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--muted);
+    }
+
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.5rem; }
+      .page-header, .filter-bar, .projects-section { padding-left: 1.5rem; padding-right: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<nav>
+  <a href="index.html" class="nav-logo">← AJ // portfolio</a>
+  <ul class="nav-links">
+    <li><a href="index.html#skills">Skills</a></li>
+    <li><a href="index.html#achievements">Achievements</a></li>
+    <li><a href="index.html#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<div class="page-header">
+  <div class="section-label">// all work</div>
+  <h1>All Projects</h1>
+  <p>18 CAD designs, 3D prints, and builds — from community models to competitive robotics.</p>
+</div>
+
+<div class="filter-bar">
+  <button class="filter-btn active" data-filter="all">All</button>
+  <button class="filter-btn" data-filter="fusion">Fusion 360</button>
+  <button class="filter-btn" data-filter="tinkercad">TinkerCAD</button>
+  <button class="filter-btn" data-filter="robotics">Robotics</button>
+  <button class="filter-btn" data-filter="community">Community</button>
+</div>
+
+<div class="projects-section">
+  <div class="projects-grid" id="projectsGrid">
+
+    <!-- Add your real projects below. To add a photo, replace the emoji with:
+         <img src="your-photo.jpg" alt="project name"> inside .project-img
+         Upload your photos to the same GitHub repo folder. -->
+
+    <div class="project-card" data-tags="community fusion tinkercad" onclick="window.location='project-jss-temple.html'" style="cursor:none">
+      <div class="project-img">🏗️<span class="placeholder-label">PHOTO COMING SOON</span></div>
+      <div class="project-body">
+        <span class="project-tag">Community</span>
+        <div class="project-title">JSS Community Models</div>
+        <p class="project-desc">3D models designed for the Jain Society of Seattle. Used Fusion 360 and TinkerCAD to create functional and decorative pieces for community use.</p>
+        <div class="project-tools">
+          <span class="tool-tag">Fusion 360</span>
+          <span class="tool-tag">TinkerCAD</span>
+          <span class="tool-tag">3D Print</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card" data-tags="robotics">
+      <div class="project-img">🤖<span class="placeholder-label">PHOTO COMING SOON</span></div>
+      <div class="project-body">
+        <span class="project-tag">Robotics</span>
+        <div class="project-title">VEX IQ Competition Robot</div>
+        <p class="project-desc">Built the majority of the robot's physical components and wrote all autonomous code. Placed Top 20 in Washington State as team captain.</p>
+        <div class="project-tools">
+          <span class="tool-tag">VEX IQ</span>
+          <span class="tool-tag">Python</span>
+          <span class="tool-tag">Autonomous</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card" data-tags="fusion" onclick="window.location='project-desk-organizer.html'" style="cursor:none;position:relative;">
+      <div class="project-img" style="position:relative;overflow:hidden;"><img src="organizer-print2.png" alt="Desk Organizer" style="width:100%;height:100%;object-fit:cover;" /></div>
+      <div class="project-body">
+        <span class="project-tag">Fusion 360</span>
+        <div class="project-title">Desk Organizer</div>
+        <p class="project-desc">A multi-compartment desk organizer designed in Fusion 360 and printed in white PLA. Keeps pencils, pens, scissors, and more neatly organized.</p>
+        <div class="project-tools">
+          <span class="tool-tag">Fusion 360</span>
+          <span class="tool-tag">3D Print</span>
+          <span class="tool-tag">PLA</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card" data-tags="tinkercad" onclick="window.location='project-headphone-hook.html'" style="cursor:none;position:relative;">
+      <div class="project-img" style="position:relative;"><img src="headphone-print1.png" alt="Headphone Wall Hook" style="width:100%;height:100%;object-fit:cover;" /></div>
+      <div class="project-body">
+        <span class="project-tag">TinkerCAD</span>
+        <div class="project-title">Headphone Wall Hook</div>
+        <p class="project-desc">A wall-mounted headphone hook designed in TinkerCAD and 3D printed in green PLA. Functional design solving a real everyday problem.</p>
+        <div class="project-tools">
+          <span class="tool-tag">TinkerCAD</span>
+          <span class="tool-tag">3D Print</span>
+          <span class="tool-tag">PLA</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card" data-tags="fusion" onclick="window.location='project-airpods-case.html'" style="cursor:none;position:relative;">
+      <div class="project-img" style="position:relative;overflow:hidden;"><img src="airpod-print3.png" alt="AirPods 4 Case" style="width:100%;height:100%;object-fit:cover;" /></div>
+      <div class="project-body">
+        <span class="project-tag">Fusion 360</span>
+        <div class="project-title">Custom AirPods 4 Case</div>
+        <p class="project-desc">A precision-fit protective case for AirPods 4 with diagonal texture, corner guards, and keychain loop. Two-color print in white and green PLA.</p>
+        <div class="project-tools">
+          <span class="tool-tag">Fusion 360</span>
+          <span class="tool-tag">3D Print</span>
+          <span class="tool-tag">AirPods 4</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card" data-tags="fusion" onclick="window.location='project-laptop-stand.html'" style="cursor:none;position:relative;">
+      <div class="project-img" style="position:relative;overflow:hidden;"><img src="stand-print1.png" alt="Laptop Stand" style="width:100%;height:100%;object-fit:cover;" /></div>
+      <div class="project-body">
+        <span class="project-tag">Fusion 360</span>
+        <div class="project-title">Foldable Laptop Stand</div>
+        <p class="project-desc">X-frame scissor stand with a custom locking mechanism. Designed in Fusion 360, used daily for 6+ months with zero failures.</p>
+        <div class="project-tools">
+          <span class="tool-tag">Fusion 360</span>
+          <span class="tool-tag">3D Print</span>
+          <span class="tool-tag">Locking Mechanism</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card" data-tags="fusion tinkercad" onclick="window.location='project-cable-winder.html'" style="cursor:none;position:relative;">
+      <div class="project-img" style="position:relative;overflow:hidden;"><img src="cable-print2.png" alt="Cable Winder" style="width:100%;height:100%;object-fit:cover;" /></div>
+      <div class="project-body">
+        <span class="project-tag">Fusion 360 + TinkerCAD</span>
+        <div class="project-title">Cable Winder</div>
+        <p class="project-desc">A compact hinged cable winder with an S-shaped internal divider. Snaps shut, unrolls cleanly, and fits in any bag.</p>
+        <div class="project-tools">
+          <span class="tool-tag">Fusion 360</span>
+          <span class="tool-tag">TinkerCAD</span>
+          <span class="tool-tag">3D Print</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card" data-tags="fusion tinkercad" onclick="window.location='project-mom-gift.html'" style="cursor:none;position:relative;">
+      <div class="project-img" style="position:relative;overflow:hidden;"><img src="momgift-print1.jpg" alt="Mother's Day MOM Display" style="width:100%;height:100%;object-fit:cover;" /></div>
+      <div class="project-body">
+        <span class="project-tag">Fusion 360 + TinkerCAD</span>
+        <div class="project-title">Mother's Day Floral Display</div>
+        <p class="project-desc">A multi-layer, multi-color floral "MOM" shadow box with butterflies, flowers, and a mother-child silhouette. Made as a Mother's Day gift.</p>
+        <div class="project-tools">
+          <span class="tool-tag">Fusion 360</span>
+          <span class="tool-tag">TinkerCAD</span>
+          <span class="tool-tag">Multi-Color</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card" data-tags="tinkercad community" onclick="window.location='project-kitchen-sign.html'" style="cursor:none;position:relative;">
+      <div class="project-img" style="position:relative;overflow:hidden;"><img src="sign-print1.jpg" alt="Custom Kitchen Sign" style="width:100%;height:100%;object-fit:cover;" /></div>
+      <div class="project-body">
+        <span class="project-tag">TinkerCAD</span>
+        <div class="project-title">Custom Kitchen Sign</div>
+        <p class="project-desc">A personalized two-color kitchen sign with magnet holes for fridge mounting. Fully customizable with any name — made as a gift.</p>
+        <div class="project-tools">
+          <span class="tool-tag">TinkerCAD</span>
+          <span class="tool-tag">Multi-Color</span>
+          <span class="tool-tag">Personalized</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card" data-tags="fusion" onclick="window.location='project-fidget-grid.html'" style="cursor:none;position:relative;">
+      <div class="project-img" style="position:relative;overflow:hidden;"><img src="morffidget-print1.jpg" alt="Morphing Fidget Grid" style="width:100%;height:100%;object-fit:cover;" /></div>
+      <div class="project-body">
+        <span class="project-tag">Fusion 360</span>
+        <div class="project-title">Morphing Fidget Grid</div>
+        <p class="project-desc">A flexible lattice fidget toy that bends, twists, and morphs in your hands. Printable in PLA or TPU for extra squishiness.</p>
+        <div class="project-tools">
+          <span class="tool-tag">Fusion 360</span>
+          <span class="tool-tag">PLA / TPU</span>
+          <span class="tool-tag">Flexible</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card" data-tags="fusion community" onclick="window.location='project-key-holder.html'" style="cursor:none;position:relative;">
+      <div class="project-img" style="position:relative;overflow:hidden;"><img src="keyholder-print1.jpg" alt="Personalized Key Holder" style="width:100%;height:100%;object-fit:cover;" /></div>
+      <div class="project-body">
+        <span class="project-tag">Fusion 360</span>
+        <div class="project-title">Personalized Key Holder</div>
+        <p class="project-desc">A house-shaped wall key holder with foldable hooks, personalized names, and a screw mount. Made as a housewarming gift.</p>
+        <div class="project-tools">
+          <span class="tool-tag">Fusion 360</span>
+          <span class="tool-tag">Multi-Color</span>
+          <span class="tool-tag">Gift</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card" data-tags="fusion" onclick="window.location='project-bag-clip.html'" style="cursor:none;position:relative;">
+      <div class="project-img" style="position:relative;overflow:hidden;"><img src="clip-print1.jpg" alt="Bag Clip" style="width:100%;height:100%;object-fit:cover;" /></div>
+      <div class="project-body">
+        <span class="project-tag">Fusion 360</span>
+        <div class="project-title">Bag Clip</div>
+        <p class="project-desc">A functional IKEA-style bag clip with a locking latch. Prints in 20 minutes and works just as well as the store-bought version.</p>
+        <div class="project-tools">
+          <span class="tool-tag">Fusion 360</span>
+          <span class="tool-tag">3D Print</span>
+          <span class="tool-tag">Utility</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card" data-tags="fusion" onclick="window.location='project-spiral-fidget.html'" style="cursor:none;position:relative;">
+      <div class="project-img" style="position:relative;overflow:hidden;"><img src="spiral-print2.jpg" alt="Spiral Fidget" style="width:100%;height:100%;object-fit:cover;" /></div>
+      <div class="project-body">
+        <span class="project-tag">Fusion 360 — First Project</span>
+        <div class="project-title">Spiral Fidget</div>
+        <p class="project-desc">Two interlocking spiral cones that pass through each other perfectly. My very first Fusion 360 design.</p>
+        <div class="project-tools">
+          <span class="tool-tag">Fusion 360</span>
+          <span class="tool-tag">First Project</span>
+          <span class="tool-tag">Fidget</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card" data-tags="tinkercad" onclick="window.location='project-phone-stand-v1.html'" style="cursor:none;position:relative;">
+      <div class="project-img" style="position:relative;overflow:hidden;"><img src="phone-print2.png" alt="Phone Stand V1" style="width:100%;height:100%;object-fit:cover;" /></div>
+      <div class="project-body">
+        <span class="project-tag">TinkerCAD</span>
+        <div class="project-title">Phone & Watch Stand V1</div>
+        <p class="project-desc">A dual charging stand for phone and Apple Watch with cable routing. Designed in TinkerCAD in 2 hours.</p>
+        <div class="project-tools">
+          <span class="tool-tag">TinkerCAD</span>
+          <span class="tool-tag">3D Print</span>
+          <span class="tool-tag">Phone + Watch</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card" data-tags="fusion" onclick="window.location='project-phone-stand-v2.html'" style="cursor:none;position:relative;">
+      <div class="project-img" style="position:relative;overflow:hidden;"><img src="phoneV2-print1.jpg" alt="Phone Stand V2" style="width:100%;height:100%;object-fit:cover;" /></div>
+      <div class="project-body">
+        <span class="project-tag">Fusion 360</span>
+        <div class="project-title">Adjustable Phone Stand V2</div>
+        <p class="project-desc">An improved adjustable phone stand with a ratcheted angle mechanism and wider design for larger phones. Built in Fusion 360.</p>
+        <div class="project-tools">
+          <span class="tool-tag">Fusion 360</span>
+          <span class="tool-tag">3D Print</span>
+          <span class="tool-tag">Adjustable</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card" data-tags="tinkercad" onclick="window.location='project-star-fidget.html'" style="cursor:none;position:relative;">
+      <div class="project-img" style="position:relative;overflow:hidden;"><img src="starfidget-print1.jpg" alt="Star Fidget" style="width:100%;height:100%;object-fit:cover;" /></div>
+      <div class="project-body">
+        <span class="project-tag">TinkerCAD — 2nd Design</span>
+        <div class="project-title">Star Fidget</div>
+        <p class="project-desc">Nested concentric star rings in a multi-color gradient. My second ever TinkerCAD design.</p>
+        <div class="project-tools">
+          <span class="tool-tag">TinkerCAD</span>
+          <span class="tool-tag">Multi-Color</span>
+          <span class="tool-tag">Fidget</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card" data-tags="fusion" onclick="window.location='project-worm-fidget.html'" style="cursor:none;position:relative;">
+      <div class="project-img" style="position:relative;overflow:hidden;"><img src="morfwormfidge-print2.jpg" alt="Worm Morph Fidget" style="width:100%;height:100%;object-fit:cover;" /></div>
+      <div class="project-body">
+        <span class="project-tag">Fusion 360</span>
+        <div class="project-title">Worm Morph Fidget</div>
+        <p class="project-desc">Modular interlocking pieces that morph into different shapes. Redesigned from a single-piece print into a numbered assembly system.</p>
+        <div class="project-tools">
+          <span class="tool-tag">Fusion 360</span>
+          <span class="tool-tag">Multi-Color</span>
+          <span class="tool-tag">Modular</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card" data-tags="fusion" onclick="window.location='project-head-scratcher.html'" style="cursor:none;position:relative;">
+      <div class="project-img" style="position:relative;overflow:hidden;"><img src="scratcher-print1.jpg" alt="Head Scratcher" style="width:100%;height:100%;object-fit:cover;" /></div>
+      <div class="project-body">
+        <span class="project-tag">Fusion 360</span>
+        <div class="project-title">Head Scratcher / Massager</div>
+        <p class="project-desc">A 3D printed scalp massager inspired by store-bought metal ones, with flexible prong arms that attach to a handle.</p>
+        <div class="project-tools">
+          <span class="tool-tag">Fusion 360</span>
+          <span class="tool-tag">Two-Part</span>
+          <span class="tool-tag">Massager</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  built by ansh jain &nbsp;•&nbsp; sammamish, wa &nbsp;•&nbsp; 2026
+</footer>
+
+<script>
+  // Cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+  function animateCursor() {
+    cursor.style.left = mx + 'px'; cursor.style.top = my + 'px';
+    rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
+    ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+    requestAnimationFrame(animateCursor);
+  }
+  animateCursor();
+
+  // Reveal on scroll
+  const cards = document.querySelectorAll('.project-card');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 50);
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.05 });
+  cards.forEach(c => observer.observe(c));
+
+  // Filter
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const filter = btn.dataset.filter;
+      document.querySelectorAll('.project-card').forEach(card => {
+        const tags = card.dataset.tags || '';
+        if (filter === 'all' || tags.includes(filter)) {
+          card.style.display = '';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    });
+  });
+</script>
+</body>
+</html>
