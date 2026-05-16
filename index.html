@@ -363,6 +363,46 @@
       color: var(--accent);
     }
 
+    /* About */
+    .about-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(240px, 0.8fr);
+      gap: 2rem;
+      align-items: start;
+    }
+    .about-copy {
+      color: var(--muted);
+      font-size: 0.98rem;
+      line-height: 1.8;
+    }
+    .about-copy p + p { margin-top: 1rem; }
+    .about-points {
+      display: grid;
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .about-point {
+      background: var(--card);
+      padding: 1rem 1.15rem;
+    }
+    .about-point span {
+      display: block;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent2);
+      margin-bottom: 0.35rem;
+    }
+    .about-point strong {
+      display: block;
+      font-size: 0.92rem;
+      line-height: 1.45;
+    }
+
     /* Skills */
     .skills-grid {
       display: grid;
@@ -460,6 +500,7 @@
       .nav-links { gap: 1.5rem; }
       .hero, section { padding: 4rem 1.5rem; }
       .hero { padding-top: 7rem; }
+      .about-layout { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -471,6 +512,7 @@
 <nav>
   <div class="nav-logo">AJ // portfolio</div>
   <ul class="nav-links">
+    <li><a href="#about">About</a></li>
     <li><a href="#projects">Projects</a></li>
     <li><a href="#skills">Skills</a></li>
     <li><a href="#achievements">Achievements</a></li>
@@ -514,9 +556,38 @@
 
 <div class="divider"></div>
 
+<!-- About -->
+<section id="about">
+  <div class="section-label reveal">// 01 - about</div>
+  <h2 class="section-title reveal">About Me</h2>
+  <div class="about-layout">
+    <div class="about-copy reveal">
+      <p>I like building things that solve real problems, especially when the project mixes design, engineering, and a little bit of trial and error. A lot of my work starts with something simple: a messy desk, a cable that keeps tangling, a community event that needs a custom model, or a robot mechanism that has to work under pressure.</p>
+      <p>Robotics taught me how to test ideas quickly, fix what breaks, and keep improving a design until it actually works. CAD and 3D printing gave me a way to turn those ideas into physical objects I can use, share, and keep refining.</p>
+      <p>Outside of building, I care about communication and community. I have spent time with Toastmasters, Code Ninjas, Boy Scouts, and the Jain Society of Seattle, which has helped me become more comfortable explaining ideas, mentoring younger students, and contributing to projects beyond just myself.</p>
+    </div>
+    <div class="about-points reveal">
+      <div class="about-point">
+        <span>Focus</span>
+        <strong>CAD, robotics, programming, and functional 3D printed designs.</strong>
+      </div>
+      <div class="about-point">
+        <span>Style</span>
+        <strong>Build, test, adjust, and keep improving until the design works.</strong>
+      </div>
+      <div class="about-point">
+        <span>Goal</span>
+        <strong>Create useful projects and explain them clearly to other people.</strong>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
 <!-- Projects -->
 <section id="projects">
-  <div class="section-label reveal">// 01 - work</div>
+  <div class="section-label reveal">// 02 - work</div>
   <h2 class="section-title reveal">CAD & 3D Projects</h2>
   <div class="projects-grid" style="grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));">
 
@@ -561,7 +632,7 @@
 
 <!-- Skills -->
 <section id="skills">
-  <div class="section-label reveal">// 02 - toolkit</div>
+  <div class="section-label reveal">// 03 - toolkit</div>
   <h2 class="section-title reveal">Skills</h2>
   <div class="skills-grid">
     <div class="skill-card reveal">
@@ -601,7 +672,7 @@
 
 <!-- Achievements -->
 <section id="achievements">
-  <div class="section-label reveal">// 03 - highlights</div>
+  <div class="section-label reveal">// 04 - highlights</div>
   <h2 class="section-title reveal">Achievements</h2>
   <div class="achievements-list">
     <div class="achievement reveal">
@@ -665,7 +736,7 @@
     <p>Whether it's about robotics, CAD, Code Ninjas, or just want to say hi - feel free to reach out.</p>
     <div class="contact-links">
       <a href="mailto:anshjain1310@outlook.com" class="btn btn-primary">Email Me</a>
-      <a href="https://github.com/AJain102" target="_blank" class="btn btn-outline">GitHub external</a>
+      <a href="https://github.com/AJain102" target="_blank" class="btn btn-outline">GitHub</a>
     </div>
   </div>
 </section>
