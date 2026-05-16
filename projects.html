@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Projects — Ansh Jain</title>
+  <title>Projects - Ansh Jain</title>
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet" />
   <style>
     :root {
@@ -159,7 +159,7 @@
     .project-card {
       background: var(--card);
       border: 1px solid var(--border);
-      border-radius: 12px;
+      border-radius: 8px;
       overflow: hidden;
       transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
       opacity: 0;
@@ -178,7 +178,10 @@
     .project-img {
       width: 100%;
       aspect-ratio: 16/10;
-      background: linear-gradient(135deg, #1e2a3a, #0f1923);
+      background:
+        radial-gradient(circle at 30% 20%, rgba(6,182,212,0.14), transparent 32%),
+        linear-gradient(135deg, #101827, #0a0e1a);
+      border-bottom: 1px solid var(--border);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -187,11 +190,14 @@
       overflow: hidden;
     }
     .project-img img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
+      width: calc(100% - 1.5rem);
+      height: calc(100% - 1.5rem);
+      object-fit: contain !important;
       position: absolute;
-      inset: 0;
+      inset: 0.75rem;
+      border-radius: 6px;
+      background: #0d1424;
+      box-shadow: 0 12px 28px rgba(0,0,0,0.28);
     }
     .project-img .placeholder-label {
       position: absolute;
@@ -273,7 +279,7 @@
 <div class="cursor-ring" id="cursorRing"></div>
 
 <nav>
-  <a href="index.html" class="nav-logo">← AJ // portfolio</a>
+  <a href="index.html" class="nav-logo">AJ // portfolio</a>
   <ul class="nav-links">
     <li><a href="index.html#skills">Skills</a></li>
     <li><a href="index.html#achievements">Achievements</a></li>
@@ -284,7 +290,7 @@
 <div class="page-header">
   <div class="section-label">// all work</div>
   <h1>All Projects</h1>
-  <p>18 CAD designs, 3D prints, and builds — from community models to competitive robotics.</p>
+  <p>18 CAD designs, 3D prints, and builds - from community models to competitive robotics.</p>
 </div>
 
 <div class="filter-bar">
@@ -298,12 +304,8 @@
 <div class="projects-section">
   <div class="projects-grid" id="projectsGrid">
 
-    <!-- Add your real projects below. To add a photo, replace the emoji with:
-         <img src="your-photo.jpg" alt="project name"> inside .project-img
-         Upload your photos to the same GitHub repo folder. -->
-
     <div class="project-card" data-tags="community fusion tinkercad" onclick="window.location='project-jss-temple.html'" style="cursor:none">
-      <div class="project-img">🏗️<span class="placeholder-label">PHOTO COMING SOON</span></div>
+      <div class="project-img"><img src="temple-print2.png" alt="JSS Community Models" /></div>
       <div class="project-body">
         <span class="project-tag">Community</span>
         <div class="project-title">JSS Community Models</div>
@@ -317,7 +319,7 @@
     </div>
 
     <div class="project-card" data-tags="robotics">
-      <div class="project-img">🤖<span class="placeholder-label">PHOTO COMING SOON</span></div>
+      <div class="project-img"><span class="placeholder-label">ROBOTICS PHOTO COMING SOON</span></div>
       <div class="project-body">
         <span class="project-tag">Robotics</span>
         <div class="project-title">VEX IQ Competition Robot</div>
@@ -401,7 +403,7 @@
     </div>
 
     <div class="project-card" data-tags="fusion tinkercad" onclick="window.location='project-mom-gift.html'" style="cursor:none;position:relative;">
-      <div class="project-img" style="position:relative;overflow:hidden;"><img src="momgift-print1.jpg" alt="Mother's Day MOM Display" style="width:100%;height:100%;object-fit:cover;" /></div>
+      <div class="project-img" style="position:relative;overflow:hidden;"><img src="momgift-print1.png" alt="Mother's Day MOM Display" style="width:100%;height:100%;object-fit:cover;" /></div>
       <div class="project-body">
         <span class="project-tag">Fusion 360 + TinkerCAD</span>
         <div class="project-title">Mother's Day Floral Display</div>
@@ -415,11 +417,11 @@
     </div>
 
     <div class="project-card" data-tags="tinkercad community" onclick="window.location='project-kitchen-sign.html'" style="cursor:none;position:relative;">
-      <div class="project-img" style="position:relative;overflow:hidden;"><img src="sign-print1.jpg" alt="Custom Kitchen Sign" style="width:100%;height:100%;object-fit:cover;" /></div>
+      <div class="project-img" style="position:relative;overflow:hidden;"><img src="sign-print1.png" alt="Custom Kitchen Sign" style="width:100%;height:100%;object-fit:cover;" /></div>
       <div class="project-body">
         <span class="project-tag">TinkerCAD</span>
         <div class="project-title">Custom Kitchen Sign</div>
-        <p class="project-desc">A personalized two-color kitchen sign with magnet holes for fridge mounting. Fully customizable with any name — made as a gift.</p>
+        <p class="project-desc">A personalized two-color kitchen sign with magnet holes for fridge mounting. Fully customizable with any name - made as a gift.</p>
         <div class="project-tools">
           <span class="tool-tag">TinkerCAD</span>
           <span class="tool-tag">Multi-Color</span>
@@ -429,7 +431,7 @@
     </div>
 
     <div class="project-card" data-tags="fusion" onclick="window.location='project-fidget-grid.html'" style="cursor:none;position:relative;">
-      <div class="project-img" style="position:relative;overflow:hidden;"><img src="morffidget-print1.jpg" alt="Morphing Fidget Grid" style="width:100%;height:100%;object-fit:cover;" /></div>
+      <div class="project-img" style="position:relative;overflow:hidden;"><img src="morffidget-print1.png" alt="Morphing Fidget Grid" style="width:100%;height:100%;object-fit:cover;" /></div>
       <div class="project-body">
         <span class="project-tag">Fusion 360</span>
         <div class="project-title">Morphing Fidget Grid</div>
@@ -443,7 +445,7 @@
     </div>
 
     <div class="project-card" data-tags="fusion community" onclick="window.location='project-key-holder.html'" style="cursor:none;position:relative;">
-      <div class="project-img" style="position:relative;overflow:hidden;"><img src="keyholder-print1.jpg" alt="Personalized Key Holder" style="width:100%;height:100%;object-fit:cover;" /></div>
+      <div class="project-img" style="position:relative;overflow:hidden;"><img src="keyholder-print1.png" alt="Personalized Key Holder" style="width:100%;height:100%;object-fit:cover;" /></div>
       <div class="project-body">
         <span class="project-tag">Fusion 360</span>
         <div class="project-title">Personalized Key Holder</div>
@@ -457,7 +459,7 @@
     </div>
 
     <div class="project-card" data-tags="fusion" onclick="window.location='project-bag-clip.html'" style="cursor:none;position:relative;">
-      <div class="project-img" style="position:relative;overflow:hidden;"><img src="clip-print1.jpg" alt="Bag Clip" style="width:100%;height:100%;object-fit:cover;" /></div>
+      <div class="project-img" style="position:relative;overflow:hidden;"><img src="clip-print1.png" alt="Bag Clip" style="width:100%;height:100%;object-fit:cover;" /></div>
       <div class="project-body">
         <span class="project-tag">Fusion 360</span>
         <div class="project-title">Bag Clip</div>
@@ -471,9 +473,9 @@
     </div>
 
     <div class="project-card" data-tags="fusion" onclick="window.location='project-spiral-fidget.html'" style="cursor:none;position:relative;">
-      <div class="project-img" style="position:relative;overflow:hidden;"><img src="spiral-print2.jpg" alt="Spiral Fidget" style="width:100%;height:100%;object-fit:cover;" /></div>
+      <div class="project-img" style="position:relative;overflow:hidden;"><img src="spiral-print2.png" alt="Spiral Fidget" style="width:100%;height:100%;object-fit:cover;" /></div>
       <div class="project-body">
-        <span class="project-tag">Fusion 360 — First Project</span>
+        <span class="project-tag">Fusion 360 - First Project</span>
         <div class="project-title">Spiral Fidget</div>
         <p class="project-desc">Two interlocking spiral cones that pass through each other perfectly. My very first Fusion 360 design.</p>
         <div class="project-tools">
@@ -499,7 +501,7 @@
     </div>
 
     <div class="project-card" data-tags="fusion" onclick="window.location='project-phone-stand-v2.html'" style="cursor:none;position:relative;">
-      <div class="project-img" style="position:relative;overflow:hidden;"><img src="phoneV2-print1.jpg" alt="Phone Stand V2" style="width:100%;height:100%;object-fit:cover;" /></div>
+      <div class="project-img" style="position:relative;overflow:hidden;"><img src="phoneV2-print1.png" alt="Phone Stand V2" style="width:100%;height:100%;object-fit:cover;" /></div>
       <div class="project-body">
         <span class="project-tag">Fusion 360</span>
         <div class="project-title">Adjustable Phone Stand V2</div>
@@ -513,9 +515,9 @@
     </div>
 
     <div class="project-card" data-tags="tinkercad" onclick="window.location='project-star-fidget.html'" style="cursor:none;position:relative;">
-      <div class="project-img" style="position:relative;overflow:hidden;"><img src="starfidget-print1.jpg" alt="Star Fidget" style="width:100%;height:100%;object-fit:cover;" /></div>
+      <div class="project-img" style="position:relative;overflow:hidden;"><img src="starfidget-print1.png" alt="Star Fidget" style="width:100%;height:100%;object-fit:cover;" /></div>
       <div class="project-body">
-        <span class="project-tag">TinkerCAD — 2nd Design</span>
+        <span class="project-tag">TinkerCAD - 2nd Design</span>
         <div class="project-title">Star Fidget</div>
         <p class="project-desc">Nested concentric star rings in a multi-color gradient. My second ever TinkerCAD design.</p>
         <div class="project-tools">
@@ -527,7 +529,7 @@
     </div>
 
     <div class="project-card" data-tags="fusion" onclick="window.location='project-worm-fidget.html'" style="cursor:none;position:relative;">
-      <div class="project-img" style="position:relative;overflow:hidden;"><img src="morfwormfidge-print2.jpg" alt="Worm Morph Fidget" style="width:100%;height:100%;object-fit:cover;" /></div>
+      <div class="project-img" style="position:relative;overflow:hidden;"><img src="morfwormfidge-print2.png" alt="Worm Morph Fidget" style="width:100%;height:100%;object-fit:cover;" /></div>
       <div class="project-body">
         <span class="project-tag">Fusion 360</span>
         <div class="project-title">Worm Morph Fidget</div>
@@ -541,7 +543,7 @@
     </div>
 
     <div class="project-card" data-tags="fusion" onclick="window.location='project-head-scratcher.html'" style="cursor:none;position:relative;">
-      <div class="project-img" style="position:relative;overflow:hidden;"><img src="scratcher-print1.jpg" alt="Head Scratcher" style="width:100%;height:100%;object-fit:cover;" /></div>
+      <div class="project-img" style="position:relative;overflow:hidden;"><img src="scratcher-print1.png" alt="Head Scratcher" style="width:100%;height:100%;object-fit:cover;" /></div>
       <div class="project-body">
         <span class="project-tag">Fusion 360</span>
         <div class="project-title">Head Scratcher / Massager</div>
@@ -558,7 +560,7 @@
 </div>
 
 <footer>
-  built by ansh jain &nbsp;•&nbsp; sammamish, wa &nbsp;•&nbsp; 2026
+  built by ansh jain  /  sammamish, wa  /  2026
 </footer>
 
 <script>
