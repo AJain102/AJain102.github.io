@@ -49,8 +49,8 @@
     .about-point span{display:block;font-size:0.68rem;text-transform:uppercase;letter-spacing:0.08em;color:#888;margin-bottom:0.3rem;}
     .about-point strong{font-size:0.875rem;font-weight:500;line-height:1.4;display:block;}
 
-    .projects-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1px;background:#e0e0e0;border:1px solid #e0e0e0;}
-    .project-card{background:#fff;cursor:pointer;transition:background 0.15s;}
+    .projects-grid{display:flex;justify-content:center;max-width:450px;margin:0 auto;border:1px solid #e0e0e0;}
+    .project-card{background:#fff;cursor:pointer;transition:background 0.15s;width:100%;}
     .project-card:hover{background:#fafafa;}
     .project-img{width:100%;aspect-ratio:16/10;background:#f0f0f0;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:0.78rem;color:#aaa;}
     .project-img img{width:100%;height:100%;object-fit:cover;}
@@ -60,7 +60,7 @@
     .project-desc-sm{font-size:0.82rem;color:#666;line-height:1.55;}
     .tool-tags{display:flex;flex-wrap:wrap;gap:0.3rem;margin-top:0.75rem;}
     .tool-tag{font-size:0.68rem;padding:0.15rem 0.45rem;background:#f0f0f0;color:#444;}
-    .view-all{margin-top:1.5rem;}
+    .view-all{margin-top:1.5rem;text-align:center;}
 
     .skills-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:1px;background:#e0e0e0;border:1px solid #e0e0e0;}
     .skill-card{background:#fff;padding:1.25rem 1.5rem;transition:background 0.15s;}
@@ -92,6 +92,7 @@
       .about-grid{grid-template-columns:1fr;}
       .stats{grid-template-columns:repeat(2,1fr);}
       .stat{border-right:none;border-bottom:1px solid #e0e0e0;}
+      .projects-grid{max-width:100%;}
     }
   </style>
 </head>
